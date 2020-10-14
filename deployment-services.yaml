@@ -1,0 +1,20 @@
+---
+#Deploy Services 
+apiVersion: v1
+kind: Service
+metadata:
+ name: test
+ labels:
+  type: front-end 
+spec:
+ type: NodePort
+ ports: 
+ - port: 80
+   nodePort: 30008
+ selector:
+   app: test
+   type: front-end
+
+
+
+

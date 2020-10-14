@@ -1,0 +1,510 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2513
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 Menlo-Regular;\f2\fswiss\fcharset0 Helvetica-Bold;
+\f3\fnil\fcharset0 Monaco;\f4\fswiss\fcharset0 Helvetica-Oblique;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue255;\red0\green0\blue0;\red217\green11\blue5;
+\red18\green19\blue24;\red255\green255\blue255;\red11\green93\blue173;\red239\green240\blue240;\red252\green39\blue18;
+\red27\green113\blue4;\red247\green247\blue247;\red217\green11\blue5;\red221\green32\blue103;\red26\green26\blue26;
+\red246\green246\blue246;\red171\green48\blue53;\red83\green83\blue83;}
+{\*\expandedcolortbl;;\cssrgb\c1680\c19835\c100000;\csgray\c0;\cssrgb\c88946\c14202\c0;
+\cssrgb\c8627\c9804\c12157;\cssrgb\c100000\c100000\c100000;\cssrgb\c0\c45098\c73333;\cssrgb\c94902\c95294\c95294;\cssrgb\c100000\c25271\c7591;
+\cssrgb\c11373\c50588\c784;\cssrgb\c97647\c97647\c97647;\cssrgb\c88946\c14202\c0;\cssrgb\c90234\c23206\c47866;\cssrgb\c13333\c13333\c13333;
+\cssrgb\c97255\c97255\c97255;\cssrgb\c73333\c26667\c26667;\cssrgb\c40000\c40000\c40000;}
+\margl1440\margr1440\vieww12600\viewh7280\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 Kubernetes :-\
+\
+Architecture :- \
+	* Master \
+		* Worker Node1 ( Kubelets )\
+		* Worker Node2\
+		\'85. NodeN\
+\
+	* API sever - Takes the commands from master \
+	* ETCD :- Stores the information about nodes \
+	* Scheduler :- Used for distributing work\
+	* Controller :- Controller manager \
+	* Container Runtime:- Docker   \
+\cf2 \
+Kubectl - Kube control\
+********\
+	* kubectl run hello-minikube - install something \
+	* kubecrl cluster-info - Gets the cluster info\
+	* kubectl get nodes - Get the details of installed nodes \
+  Kubernetes installation :- \
+	* Minikube\
+	* Microk8s\
+	* Kubeadmin\
+\
+Minikube :-\
+	* kubectl must be installed \
+	* Minikube.exe must be installed\
+	* Must have a hypervisor installed \
+	* Permanent Kubernetes can be installed on - Google Container Engine ( GKE )\
+	* Kubeadm - Used for multimode Kubernetes cluster in a local env\
+	* kubectl commands :-\
+		* 
+\f1\fs22 \cf3 \CocoaLigature0 kubectl create deployment hello-minikube --image=k8s.gcr.io/echoserver:1.10
+\f0\fs24 \cf2 \CocoaLigature1 \
+		* 
+\f1\fs22 \cf3 \CocoaLigature0 kubectl expose deployment hello-minikube --type=NodePort --port=8080\
+		
+\f0\fs24 \cf2 \CocoaLigature1 * kubectl get pods \
+		* kubectl get nodes \
+		* kubectl get nodes -o wide - To show the OS versions \
+		* kubectl delete services hello-minikube - Delete the service\
+		* kubectl delete deployment hello-minikube - Delete the deployments \
+\
+Pods :-\
+	* Pods resides inside node\
+	* kubectl run nginx image=nginx\
+	* kubectl describe pod nginx\
+	* kubectl get pods -o wide \
+YAML:-\
+\
+	* YAML in kubernetes \
+	* Create PODS using YAML\
+		* apiVersion: v1\
+		* kind: pod \
+		* metadata:\
+			name: samar-test-pod\
+			labels:\
+				app: myapp\
+				type: front-end\
+\
+		* spec:\
+			containers:\
+				- name: nginx-container\
+				  image: nginx\
+	* kubectl create -f pod-definitions.yml \
+	* kubectl edit pods <pod name >\
+	* kubectl get pods -o wide\
+ \
+Replication Controllers/\
+	* apiVersion: v1\
+	* kind: ReplicationController\
+	* metadata:\
+		name: my app-rc\
+		labels:\
+		   name: myapp\
+		   type: front-end\
+	* spec:\
+	     template:\
+		metadata:\
+		   name: pod1\
+		   labels:\
+ 		      app: app1\
+                            type: front-end\
+		   spec:\
+			containers:\
+			 - name: nginx\
+                                    image: nginx\
+	     replicas: 3 \'97\'97\'97\'97> Number of pods \
+	* \cf4 kubectl get replicationcontroller\cf2 \
+	* kubectl get pods \
+\
+Replica Set:- ( Need an extra selector )\
+\
+	* apiVersion: apps/v1\
+	* kind: ReplicaSet\
+	* metadata:\
+		name: my app-rc\
+		labels:\
+		   name: myapp\
+		   type: front-end\
+	* spec:\
+	     template:\
+		metadata:\
+		   name: pod1\
+		   labels:\
+ 		      app: app1\
+                            type: front-end\
+		   spec:\
+			containers:\
+			 - name: nginx\
+                                    image: nginx\
+	     replicas: 3\
+	     selector:\
+		matchLabels:\
+			type: front-end \
+	* \cf4 kubectl get replicaset\
+	* kubectl delete  replicaset <set name >\
+	\cf2 * Replica Set is a process to minitor the pods \
+	* kubectl replace -f <file  name > - To increase the replicas\
+	* kubectl scale replicaset <name> - -replicas=6 - - To scale the replicas \
+	* kubectl scale replicaset <replicaname > - -replicas=8 \
+	* kubectl edit ReplicSet <ReplicaSet name>\
+\
+Deployments \
+\
+	* All remain same as ReplicaSet\
+	* kind : Deployment - This is the only change required \
+	* kubectl create -f <File name >\
+	* kubectl get all - Lists everything\
+	* Shortcut commands :- \
+		* kubectl create deployments http-frontend - -image=httpd:2.4-alpine\
+		* kubectl create deployments test - -image=httpd:2.4-alpine - -replicas=3\
+		* kubectl scale deployment test - -replicas=4 \'97 > This will scale the pods \
+		* kubectl get deployment <name>\
+		kubectl get deployment <name> -o wide \
+\
+Deployments - Update/Rollback/Versioning\
+	* kubectl rollout status deployment/<deployment name >\
+	* kubectl rollout history deployment/<deployment name>\
+	* Deployment strategies :-\
+		* Destroy the 5 and deploy a new one \
+		* Rolling deploy/update - 1 down and 1 up \
+	* kubectl rollout undo deployment/<app name> - \'97 > Will undo a rollout \
+	* kubectl set image deployment <app name>  nginx=nginx:1.19 \'97record\
+\
+Networking in Kubernetes :\
+	* Routings\
+	* Services\
+		* NodePort range :- 30000 - 32767\
+	* services.yaml template\
+		aptVersion: v1\
+		kind: Service\
+		metadata:\
+		spec:\
+			type: NodePort\
+			ports:\
+			 - targetPort: 80\
+			   port: 80\
+			   nodePort: 30008\
+			selector:\
+			   app: test\
+			   type: front-end\
+	* Commands \
+		* kubectl get services \
+		* kubectl get svc\
+		* If you are running in Minikube type bellow commands to get the URL\
+			minikube service <svc name> \'97url\
+	* ClusterIP\
+		* yaml File\
+			apiVersion: v1\
+			kind: Service\
+			metadata:\
+			spec:\
+				type: ClusterIp\
+				ports:\
+			 	- targetPort: 80\
+				  port: 80\
+				  nodePort: 30008\
+	* Service Load Balancer\
+		* yaml file \
+			apiVersion: v1\
+			kind: Service\
+			metadata:\
+			spec:\
+				type: LoadBalancer\
+				ports:\
+			 	- targetPort: 80\
+				  port: 80\
+				  nodePort: 30008\
+	* Shortest way to create a service :-\
+		kubectl expose deployment <Deployment name> - -name=<> - -target-port= 8080 - -port=8080 - -NodePort=30080  - -type=Nodeport  - - dry-run=client -o yaml > svc.yaml\
+\
+Microservices Architecture :-\
+\
+	* Designing a Voting App\
+		* Using docker\
+			* 
+\f1\fs22 \cf3 \CocoaLigature0 docker run -d --name=redis redis\
+			* docker run -d --name=db postgres
+\f0\fs24 \cf2 \CocoaLigature1 \
+			* 
+\f1\fs22 \cf3 \CocoaLigature0 docker run -d --name=vote -p 5000:80 --link=redis:redis voting-app < - Deploy a app\
+			* docker run -d --name=result -p 5001:80 --link db:db result-app \
+			* docker run -d --name=worker --link db:db --link redis:redis worker
+\f0\fs24 \cf2 \CocoaLigature1 \
+		* Using Kubernetes \
+			* Deploy PODs \
+			* Create Services ( ClusterIP)\
+				* redis\
+				* db\
+			* Create Services ( NodePort)\
+				* voting-app\
+				* result-app\
+\
+		* Steps to run the yaml files:-\
+			* First create pod\
+			* Create the services \
+			* Create redis pod\
+			* Create redis service \
+			* Create Postgres pod\
+			* Create Postgres services \
+			* Create worker pod\
+			* Create woker service \
+			* Create the result pod\
+			* Create the result service \
+	Note:-\
+	 * 
+\f1\fs22 \cf3 \CocoaLigature0 minikube service voting-service - It will open up the services in web-browser
+\f0\fs24 \cf2 \CocoaLigature1 	\
+* Kubernetes on Cloud \
+\
+	* GKE ( Google Kubernetes Engine ) \
+		* Deploy Clusters in GCP\
+			\
+	* AKS ( Azure Kubernetes Service )\
+		* \
+	* EKS ( Amazon Elastic Kubernets Services )\
+		* Create a Cluster \
+		* Create IAM roles for cluster \
+			* \cf5 \cb6 \expnd0\expndtw0\kerning0
+Open the IAM console at {\field{\*\fldinst{HYPERLINK "https://console.aws.amazon.com/iam/"}}{\fldrslt \cf7 https://console.aws.amazon.com/iam/}}. \
+			* In the navigation panel, choose 
+\f2\b Roles
+\f0\b0 . \cb1 \
+			* \cb6 Search the list of roles for 
+\f3 \cb8 eksClusterRole
+\f0 \cb6 . If a role that includes 
+\f3 \cb8 eksClusterRole
+\f0 \cb6  does not exist, then see \cf7 Creating the Amazon EKS cluster role\cf5  to create the role. If a role that includes 
+\f3 \cb8 eksClusterRole
+\f0 \cb6  does exist, then select the role to view the attached policies. \cb1 \
+			\cb6 \kerning1\expnd0\expndtw0 * \expnd0\expndtw0\kerning0
+Choose 
+\f2\b Permissions
+\f0\b0 . \cb1 \
+			* \cb6 Ensure that the 
+\f2\b AmazonEKSClusterPolicy
+\f0\b0  managed policy is attached to the role. If the policy is attached, your Amazon EKS cluster role is properly configured. \cb1 \
+			\cb6 \kerning1\expnd0\expndtw0 * \expnd0\expndtw0\kerning0
+Choose 
+\f2\b Trust Relationships
+\f0\b0 , 
+\f2\b Edit Trust Relationship
+\f0\b0 . \cb1 \
+			* \cb6 Verify that the trust relationship contains the following policy. If the trust relationship matches the policy below, choose 
+\f2\b Cancel
+\f0\b0 . If the trust relationship does not match, copy the policy into the 
+\f2\b Policy Document
+\f0\b0  window and choose 
+\f2\b Update Trust Policy
+\f0\b0 .\
+		* Make 
+\f2\b \cf9 sure to add this line in the trusted Policy
+\f0\b0 \cf5  - \cf2 \cb1 \kerning1\expnd0\expndtw0  "AWS": "arn:aws:iam::<Account ID >:user/<User Name>\'94\
+		* Create node groups \
+		* Create IAM roles for node cluster \
+			* 
+\f2\b\fs32 \cf5 \cb6 \expnd0\expndtw0\kerning0
+To create your Amazon EKS node role in the IAM console
+\f0\b0 \cb1 \
+			* \cb6 Open the IAM console at {\field{\*\fldinst{HYPERLINK "https://console.aws.amazon.com/iam/"}}{\fldrslt \cf7 https://console.aws.amazon.com/iam/}}. \cb1 \
+			* \cb6 Choose 
+\f2\b Roles
+\f0\b0 , then 
+\f2\b Create role
+\f0\b0 . \cb1 \
+			* \cb6 Choose 
+\f2\b EC2
+\f0\b0  from the list of 
+\f2\b Common use cases
+\f0\b0  under
+\f2\b  Choose a use case,
+\f0\b0  then choose 
+\f2\b Next: Permissions
+\f0\b0 . \cb1 \
+			* \cb6 In the 
+\f2\b Filter policies
+\f0\b0  box, enter 
+\f3 \cf10 \cb8 AmazonEKSWorkerNodePolicy
+\f0 \cf5 \cb6 . Check the box to the left of 
+\f2\b AmazonEKSWorkerNodePolicy.\
+
+\f0\b0 \cb1 			* \cb6 In the 
+\f2\b Filter policies
+\f0\b0  box, enter 
+\f3 \cf10 \cb8 AmazonEKS_CNI_Policy
+\f0 \cf5 \cb6 . Check the box to the left of 
+\f2\b AmazonEKS_CNI_Policy.
+\f0\b0 \cb1 \
+			* \cb6 In the 
+\f2\b Filter policies
+\f0\b0  box, enter 
+\f3 \cf10 \cb8 AmazonEC2ContainerRegistryReadOnly
+\f0 \cf5 \cb6 . Check the box to the left of 
+\f2\b AmazonEC2ContainerRegistryReadOnly.
+\f0\b0 \cb1 \
+			* \cb6 Choose 
+\f2\b Next: Tags
+\f0\b0 . \cb1 \
+			* \cb6 (Optional) Add metadata to the role by attaching tags as key\'96value pairs. For more information about using tags in IAM, see {\field{\*\fldinst{HYPERLINK "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html"}}{\fldrslt \cf7 Tagging IAM Entities}} in the 
+\f4\i \cf5 IAM User Guide
+\f0\i0 \cf5 . \cb1 \
+			* \cb6 Choose 
+\f2\b Next: Review
+\f0\b0 . \cb1 \
+			* \cb6 For 
+\f2\b Role name
+\f0\b0 , enter a unique name for your role, such as 
+\f3 \cf10 \cb8 NodeInstanceRole
+\f0 \cf5 \cb6 . For 
+\f2\b Role description
+\f0\b0 , replace the current text with descriptive text such as 
+\f3 \cf10 \cb8 Amazon EKS - Node Group Role
+\f0 \cf5 \cb6 , then choose 
+\f2\b Create role
+\f0\b0 .
+\fs24 \cf2 \cb1 \kerning1\expnd0\expndtw0 \
+\
+		* Create node groups \
+			* Create a key-pair to access the cluster \
+		* Install AWS cli \
+		* Install kubectl if you already haven\'92t installed \
+		* If you have aws account please set the access-ID, secret key and region\
+		*  Run this command to add your cluster :-\
+		* 
+\f1\fs22 \cf3 \CocoaLigature0 aws eks --region <your region> update-kubeconfig --name <Cluster Name >\
+		* [ testing ] Update iam for your cluster :- 
+\f3\fs29\fsmilli14880 \cf10 \cb11 \expnd0\expndtw0\kerning0
+\CocoaLigature1 aws --region <region-code> eks update-kubeconfig --name <cluster_name> --role-arn arn:aws:iam::<aws_account_id>:role/<role_name>\
+		* [ Testing ] Download the key file - curl -o aws-auth-cm.yaml https://amazon-eks.s3.us-west-2.amazonaws.com/cloudformation/2020-08-12/aws-auth-cm.yaml\
+		* [ Testing ] - 
+\f0\fs32 \cf5 \cb6 Open the file with your favorite text editor. Replace 
+\f3 \cb8 <ARN of instance role (not instance profile)>
+\f0 \cb6  with the Amazon Resource Name (ARN) of the IAM role associated with your nodes, and save the file. Do not modify any other lines in this file.
+\f3\fs29\fsmilli14880 \cf10 \cb11 \
+
+\f1\fs22 \cf3 \cb1 \kerning1\expnd0\expndtw0 \CocoaLigature0   
+\f0\fs24 \cf2 \CocoaLigature1 \
+\
+	* 
+\f3\fs29\fsmilli14880 \cf10 \cb11 \expnd0\expndtw0\kerning0
+kubectl version --short --client \'97> To check there client version 
+\f0\fs24 \cf2 \cb1 \kerning1\expnd0\expndtw0 \
+\
+\
+*********\
+Note :- If you are getting bellow error :-  \
+********\
+\cf12 An error occurred (AccessDenied) when calling the AssumeRole operation:\cf2  User: arn:aws:iam::102868756097:user/dscdevopstest is not authorized to perform: sts:AssumeRole on resource: arn:aws:iam::dscdevopstest:role/eksClusterRole_sam\
+\
+\
+Orig:-\
+\
+\{\
+  "Version": "2012-10-17",\
+  "Statement": [\
+    \{\
+      "Effect": "Allow",\
+      "Principal": \{\
+        "Service": "eks.amazonaws.com"\
+      \},\
+      "Action": "sts:AssumeRole"\
+    \}\
+  ]\
+\}\
+\
+New:-\
+\
+\{\
+  "Version": "2012-10-17",\
+  "Statement": [\
+    \{\
+      "Effect": "Allow",\
+      "Principal": \{\
+        "Service": "eks.amazonaws.com\'94,\
+        "AWS": "arn:aws:iam::<Account ID >:user/<User Name>\'94\
+      \},\
+      "Action": "sts:AssumeRole"\
+    \}\
+  ]\
+\}\
+\
+\
+		* https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html \
+		* https://docs.aws.amazon.com/eks/latest/userguide/troubleshooting.html#unauthorized\
+		* https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html\
+\
+* Try this if you are getting server unauthorized error ( \cf13 So far it didn\'92t work for me\cf2  ) :- https://aws.amazon.com/premiumsupport/knowledge-center/eks-api-server-unauthorized-error/\
+\
+	* Once the above things resolved, try to make your deployments \
+		* kubectl create -f voting-app-deployment.yaml\
+		* kubectl create -f voting-app-service.yaml\
+		* kubectl create -f redis-app-deployment.yaml\
+		* kubectl create -f redis-app-service.yaml\
+		* kubectl create -f postgress-app-deployment.yaml\
+		* kubectl create -f postgress-app-service.yaml\
+		* kubectl create -f worker-app-deployment.yaml\
+		* kubectl create -f result-app-deployment.yaml\
+		* kubectl create -f result-app-service.yaml\
+	* verify the deployment - kubectl get deployment,svc\
+\
+\
+AKS ( Azure Kubernetes Service )\
+**********************\
+\
+	* Create an Azure Account \
+	* Select the Kubernetes service ( AKS)\
+		* Create the cluster \
+			* Select the proper subscription \
+			* Name \
+			* Version - default \
+			* Node size - 1 \
+		* Auth ;- Service principle - Create a new one \
+		* Use cloud shell \
+		* Select the storage \
+\
+kubeadm\
+**********\
+\
+https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/\
+\
+\
+* Clone this - https://github.com/kodekloudhub/certified-kubernetes-administrator-course.git \
+* Once clone done - go to the folder\
+* Open the Vagrantfile and make sure it has 1 master and 2 worker nodes set \
+* run - vagrant up\
+* SSH to nodes and master using - vagrant ssh kubemaster or vagrant ssh kubenode01\
+* Login to master  and run bellow commands \
+	* lsmod | grep br_netfilter - if its not loaded run - \
+	* sudo mod probe br_netfilter\
+	* Run the above commands in all nodes \
+* Create bridges \
+	* Copy paste bellow configs in all nodes \
+		
+\f1\fs28 \cf14 \cb15 \expnd0\expndtw0\kerning0
+cat \cf16 <<EOF | sudo tee /etc/sysctl.d/k8s.conf\
+\pard\pardeftab720\partightenfactor0
+\cf16 		net.bridge.bridge-nf-call-ip6tables = 1\
+		net.bridge.bridge-nf-call-iptables = 1\
+		EOF\cf14 \
+		sudo sysctl --system
+\f0\fs24 \cf2 \cb1 \kerning1\expnd0\expndtw0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf2 	*  Install Docker - https://kubernetes.io/docs/setup/production-environment/container-runtimes/\
+	* Make sure docker is running by doing \'93 systemctl status docker\'94\
+	*  Install bellow contents \
+		
+\f1\fs28 \cf14 \cb15 \expnd0\expndtw0\kerning0
+sudo apt-get update \cf17 \cb15 &&\cf14 \cb15  sudo apt-get install -y apt-transport-https curl\
+\pard\pardeftab720\partightenfactor0
+\cf14 		curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -\
+		cat \cf16 <<EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list\
+		deb https://apt.kubernetes.io/ kubernetes-xenial main\
+		EOF\cf14 \
+		sudo apt-get update\
+		sudo apt-get install -y kubelet kubeadm kubectl\
+		sudo apt-mark hold kubelet kubeadm kubectl
+\f0\fs24 \cf2 \cb1 \kerning1\expnd0\expndtw0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf2 \
+	* Create a cluster - https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/ \
+	* Configure the pods by running this command :- \
+		kubeadmin init will initiate the \
+		kubeadm init --pod-network-cidr 10.244.0.0/16 --apiserver-advertise-address=<Master node ip>\
+	* Configure the config file under .kube/home folder \
+		 mkdir -p $HOME/.kube\
+  		 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config\
+  		 sudo chown $(id -u):$(id -g) $HOME/.kube/config\
+	* Copy paster the command to join the cluster as shown in the above  upgrade \
+		 kubeadm join 192.168.56.2:6443 --token vd20cl.k0pqprwp9kuq4g7c \\\
+    --discovery-token-ca-cert-hash sha256:dcfe11f2b42b2469c487d9eacf2772763abe6d5b5639ac517f6862c7eabf3c99\
+\
+ 	\
+\
+\
+}
