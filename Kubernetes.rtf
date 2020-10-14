@@ -65,7 +65,7 @@ YAML:-\
 	* YAML in kubernetes \
 	* Create PODS using YAML\
 		* apiVersion: v1\
-		* kind: pod \
+		* kind: Pod \
 		* metadata:\
 			name: samar-test-pod\
 			labels:\
@@ -100,7 +100,8 @@ Replication Controllers/\
 			 - name: nginx\
                                     image: nginx\
 	     replicas: 3 \'97\'97\'97\'97> Number of pods \
-	* \cf4 kubectl get replicationcontroller\cf2 \
+	* \cf4 kubectl get replicationcontroller\
+	* kubectl delete replicationcontroller <>\cf2 \
 	* kubectl get pods \
 \
 Replica Set:- ( Need an extra selector )\
@@ -504,7 +505,7 @@ sudo apt-get update \cf17 \cb15 &&\cf14 \cb15  sudo apt-get install -y apt-trans
 		 kubeadm join 192.168.56.2:6443 --token vd20cl.k0pqprwp9kuq4g7c \\\
     --discovery-token-ca-cert-hash sha256:dcfe11f2b42b2469c487d9eacf2772763abe6d5b5639ac517f6862c7eabf3c99\
 \
- 	\
+ 		\
 \
 \
 }
