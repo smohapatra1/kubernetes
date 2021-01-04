@@ -1,0 +1,22 @@
+#Creating and deploying  a pod
+apiVersion: v1
+kind: Pod
+metadata:
+ name: nginx-test
+ labels: 
+  app: myapp
+  type: front-end
+spec:
+ containers:
+  - name: nginx-contaioner
+    image: nginx
+    resources:
+     limits:
+       memory: "128Mi"
+       cpu: "500m"
+  - name: backend-contaioner
+    image: redis
+    resources:
+     limits:
+       memory: "128Mi"
+       cpu: "500m"
