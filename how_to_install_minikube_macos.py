@@ -12,6 +12,22 @@ import cmd
     # 	minikube start --vm-driver=virtualbox # If you are starting using a virtual machine e.g vagrant
     # 	https://minikube.sigs.k8s.io/docs/drivers/virtualbox/
 
+#Note 
+    #	Both driver=virtualbox and vm-driver=virtualbox have been set.
+    #	Since vm-driver is deprecated, minikube will default to driver=virtualbox.
+    #	If vm-driver is set in the global config, please run "minikube config unset vm-driver" to resolve this warning.
+
+# If we get bellow error while starting minikube 
+    #	W0108 03:21:02.553404   99160 out.go:151] 💣  error provisioning host: Failed to validate network: dial tcp 192.168.99.114:22: i/o timeout
+    #	💣  error provisioning host: Failed to validate network: dial tcp 192.168.99.114:22: i/o timeout
+   #Solution 
+    # Upgrade Virtual Box
+    # Re-install minikube
+    # minikube stop
+    # minikube delete
+    # brew install minikube
+
+
 # Install Minikube
     # * Stop Minikube
     # * Remove minikube
@@ -42,3 +58,4 @@ print ("Installing minikube....")
 subprocess_cmd('sysctl -a | grep -E --color "machdep.cpu.features|VMX" ; brew update ; minikube stop; minikube delete ; brew install minikube; sudo mv minikube /usr/local/bin ; which minikube ; minikube version; kubeadmin version ; kubectl version ; kubelet version ; minikube status ; sudo chown -R $USER $HOME/.minikube ; minikube start --vm-driver=virtualbox; minikube status ')
 
 #subprocess_cmd('sudo minikube stop; sudo apt-get update ; sudo apt-get -y autoremove kubeadm kubectl kubelet; sudo apt-get -y install curl ; curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add ; sudo apt-add-repository "deb http://apt.kubernetes.io/ kubernetes-xenial main"; sudo apt-get -y install kubeadm kubelet kubectl ; kubeadm version ; kubectl version ; kubelet version ; sudo rm -rf /usr/local/bin/minikube; curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.28.2/minikube-linux-amd64 ; chmod +x minikube ; sudo mv minikube /usr/local/bin/ ; minikube status; minikube version; sudo minikube start --vm-driver=none ; sudo kubectl config view ; chown -R $USER $HOME/.kube ; sudo chgrp -R $USER $HOME/.kube; sudo chown -R $USER $HOME/.minikube ; sudo chgrp -R $USER $HOME/.minikube; sudo minikube stop; sudo kubectl config use-context minikube ; sudo minikube start ')
+
