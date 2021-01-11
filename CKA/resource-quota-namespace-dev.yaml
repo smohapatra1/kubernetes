@@ -1,0 +1,13 @@
+#Create namespace using resource QUOTA
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+ name: quota
+ namespace: dev
+spec:
+ hard:
+  pods: "10"
+  requests.cpu: "4"
+  requests.memory: "5Gi"
+  limits.cpu: "1"
+  limits.memory: "1Gi"

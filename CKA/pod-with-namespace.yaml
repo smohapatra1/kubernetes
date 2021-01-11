@@ -1,0 +1,17 @@
+#Create pod with namespace
+apiVersion: v1
+kind: Pod
+metadata:
+ name: pod-test
+ namespace: dev
+ labels:
+  name: myapp
+  type: front-end
+spec:
+ containers:
+ - name: nginx
+   image: nginx
+   resources:
+    limits:
+     memory: "128Mi"
+     cpu: "100m"

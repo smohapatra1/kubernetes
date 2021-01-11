@@ -1,0 +1,29 @@
+#Create ReplicaSet
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+ name: rs-test
+ labels:
+  name: myapp
+  type: front-end
+spec:
+ template:
+  metadata:
+   name: rs-test
+   labels:
+    name: myapp
+    type: front-end
+  spec:
+   containers:
+    - name: nginx-container
+      image: nginx
+      resources:
+       limits:
+        memory: "128Mi"
+        cpu: "500m"
+ replicas: 2
+ selector:
+  matchLabels:
+   type: front-end
+
+  

@@ -1,0 +1,25 @@
+#create a replication Controller yaml file 
+
+apiVersion: v1
+kind: ReplicationController
+metadata:
+ name: pod-replica
+ labels: 
+  app: myapp
+  type: front-end   
+spec:
+ template: 
+  metadata:
+   name: myapp1
+   labels:
+    app: myapp
+    type: front-end
+  spec:
+   containers: 
+    - name: nginx-container
+      image: nginx
+      resources:
+        limits:
+         memory: "128Mi"
+         cpu: "500m"
+ replicas: 2
