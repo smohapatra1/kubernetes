@@ -1,0 +1,17 @@
+#Scheduling defination for POD 
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-test
+  labels:
+    name: myapp
+    type: front-end
+spec:
+  nodeName: master
+  containers:
+    - name: nginx
+      image: nginx
+      resources:
+       limits:
+        cpu: "128m"
+        memory: "250Mi" 
