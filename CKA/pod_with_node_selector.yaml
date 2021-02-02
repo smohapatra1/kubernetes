@@ -1,0 +1,18 @@
+# POD with Node Selector 
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pod
+  labels:
+    app: myapp
+    type: front-end
+spec:
+  containers:
+  - name: test-pod
+    image: nginx
+    resources:
+     limits:
+      cpu: "200m"
+      memory: "120Mi"
+  nodeSelector:
+    size: Large 
