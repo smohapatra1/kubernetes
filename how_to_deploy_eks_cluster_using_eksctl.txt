@@ -1,0 +1,72 @@
+
+* Install EKSCTL - https://www.youtube.com/watch?v=p6xDCz00TxU
+
+Install EKSCTL :-
+******************
+	* brew tap weaveworks/tap
+	* brew install weaveworks/tap/eksctl
+		* If you get the error like bellow :-
+			Error: Your Command Line Tools are too outdated.
+			Update them from Software Update in System Preferences or run:
+	  	softwareupdate --all --install --force
+			* sudo rm -rf /Library/Developer/CommandLineTools
+	  	* sudo xcode-select --install
+	* Check version using - eksctl version
+	* Check the aws credetials in - ~/.aws/credentials - Add the account ID and password
+
+Deploy EKS using eksctl :- https://eksctl.io/usage/creating-and-managing-clusters/
+**********
+
+	* Create a config with details as needed - VPC name, region, subnet etc.
+
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+#https://eksctl.io/usage/creating-and-managing-clusters/
+#https://raw.githubusercontent.com/pixie-labs/pixie-demos/main/eks-workshop/clusterconfig.yaml
+metadata:
+  name: dsc-cicd
+  region: us-east-1
+
+vpc:
+  subnets:
+    private:
+      us-east-1c: { id: subnet-08a1eb487b06e10d2 }
+      us-east-1a: { id: subnet-0baca2c35b1e3fce9 }
+      us-east-1d: { id: subnet-06bb81992a0e81f9a }
+
+managedNodeGroups:
+  - name: test-sam-workers
+    labels: { role: workers }
+    instanceType: t2.micro
+    desiredCapacity: 2
+    privateNetworking: true
+  - name: test-sam-builders
+    labels: { role: builders }
+    instanceType: t2.micro
+    desiredCapacity: 2
+    privateNetworking: true
+    iam:
+      withAddonPolicies:
+        imageBuilder: true
+
+	* Run this after having a config file : -
+	 eksctl create cluster -f cluster.yaml
+
+	* if you encounter any issues, check CloudFormation console or try 'eksctl utils describe-stacks --region=us-east-1 --cluster=dsc-cicd-sam2'
+
+	* Delete cluster - eksctl delete cluster --name test-sam-cluster
+	OR eksctl delete cluster -f cluster.yaml
+
+	* Get the nodes :- kubectl get nodes 
+
+	* get pods in all name spaces :- kubectl get pods --all-namespaces -o wide
+	* Describe pods :- kubectl describe pod -n  kube-system   aws-node-66k4t ( kubectl describe pod -n <name-space> <pod name>)
+	* Acess the pod :- kubectl exec -it -n  kube-system aws-node-66k4t -- bash
+	* export AWS_DEFAULT_REGION=us-east-1 - To set the zone
+	* eksctl get cluster
+	* eksctl get nodegroups --cluster=dsc-cicd-sam - To see the nodes
+
+
+	* https://gist.github.com/suhas316380/969620d95e111b9b34c7e1689ada722d - Command line without yaml files
+
+
