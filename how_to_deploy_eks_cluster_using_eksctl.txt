@@ -1,6 +1,13 @@
 
 * Install EKSCTL - https://www.youtube.com/watch?v=p6xDCz00TxU
 
+Prerequisites
+Kubectl — communication tool we will use to communicate between our Kubernetes cluster and our machine. Installation instructions available on https://kubernetes.io/docs/tasks/tools/install-kubectl/
+AWS CLI — AWS tool which we will use to issue commands related to AWS configurations. To install follow https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html
+Aws iam authenticator — Give permission with IAM roles to access our Kubernetes cluster. For installation https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html
+eksctl — Official CLI tool for AWS EKS. For installation https://github.com/weaveworks/eksctl
+
+
 Install EKSCTL :-
 ******************
 	* brew tap weaveworks/tap
